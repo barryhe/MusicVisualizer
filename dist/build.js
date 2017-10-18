@@ -40054,9 +40054,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["default"].use(__WEBPACK_IMPORTED_MODULE_3_ele
 
 new __WEBPACK_IMPORTED_MODULE_0_vue__["default"]({
   el: '#app',
-  render: function render(h) {
-    return h(__WEBPACK_IMPORTED_MODULE_1__App_vue__["a" /* default */]);
-  }
+  render: h => h(__WEBPACK_IMPORTED_MODULE_1__App_vue__["a" /* default */])
 });
 
 /***/ }),
@@ -40507,7 +40505,7 @@ process.umask = function() { return 0; };
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_App_vue__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2fd614ce_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_App_vue__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_3e682428_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_App_vue__ = __webpack_require__(91);
 function injectStyle (ssrContext) {
   __webpack_require__(37)
 }
@@ -40526,7 +40524,7 @@ var __vue_scopeId__ = null
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
   __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_App_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2fd614ce_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_App_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_3e682428_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_App_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,
@@ -40547,7 +40545,7 @@ var content = __webpack_require__(38);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(18)("17871f32", content, true);
+var update = __webpack_require__(18)("5aca3890", content, true);
 
 /***/ }),
 /* 38 */
@@ -40647,7 +40645,7 @@ module.exports = function listToStyles (parentId, list) {
 /* harmony default export */ __webpack_exports__["a"] = ({
     components: { Bar: __WEBPACK_IMPORTED_MODULE_1__bar_vue__["a" /* default */], element: __WEBPACK_IMPORTED_MODULE_3_element_ui___default.a },
     name: 'app',
-    data: function data() {
+    data() {
         return {
             num: 32, // number of bars
             trim: 2,
@@ -40655,7 +40653,7 @@ module.exports = function listToStyles (parentId, list) {
             container: 700,
             maxDeci: 0,
             minDeci: -60,
-            song: "gai",
+            song: "ID",
             options: ['gai', 'culture', 'headlights', 'ID'],
 
             radius: 250, // radius size
@@ -40678,17 +40676,19 @@ module.exports = function listToStyles (parentId, list) {
             mData: []
         };
     },
-
-    created: function created() {
+    created: function () {
         this.setup();
     },
     methods: {
-        setup: function setup() {
+        pathGenerator() {
+            return "http://localhost:8080/dist/music/" + this.song + ".mp3";
+        },
+        setup: function () {
 
             this.frequencyData.fill(0);
 
             this.trimmedData = this.num / 2 - this.trim - this.offset;
-            for (var i = this.offset; i < this.trimmedData + this.offset; i++) {
+            for (let i = this.offset; i < this.trimmedData + this.offset; i++) {
                 this.mData.push(0);
             }
             this.mData.fill(0);
@@ -40696,13 +40696,13 @@ module.exports = function listToStyles (parentId, list) {
             window.AudioContext = window.AudioContext || window.webkitAudioContext;
             this.ctx = new AudioContext();
 
-            var path = "../Testing/dist/music/" + this.song + ".mp3";
-            this.audio = new Audio(path);
+            this.audio = new Audio(this.pathGenerator());
+            this.audio.crossOrigin = "anonymous";
             this.audio.addEventListener('loadedmetadata', function () {
                 this.loaded = true;
             }.bind(this));
 
-            var audioSrc = this.ctx.createMediaElementSource(this.audio);
+            let audioSrc = this.ctx.createMediaElementSource(this.audio);
             this.analyser = this.ctx.createAnalyser();
 
             audioSrc.connect(this.analyser);
@@ -40719,13 +40719,13 @@ module.exports = function listToStyles (parentId, list) {
             // we're ready to receive some data!
             // loop
         },
-        renderFrame: function renderFrame() {
+        renderFrame() {
             requestAnimationFrame(this.renderFrame);
             // update data in frequencyData
             if (this.playing) {
                 this.analyser.getByteFrequencyData(this.frequencyData);
-                var temp = __WEBPACK_IMPORTED_MODULE_2_taira___default.a.smoothen(this.frequencyData, __WEBPACK_IMPORTED_MODULE_2_taira___default.a.ALGORITHMS.AVERAGE, 3, 0.5, false);
-                for (var i = 0; i < this.trimmedData; i++) {
+                let temp = __WEBPACK_IMPORTED_MODULE_2_taira___default.a.smoothen(this.frequencyData, __WEBPACK_IMPORTED_MODULE_2_taira___default.a.ALGORITHMS.AVERAGE, 3, 0.5, false);
+                for (let i = 0; i < this.trimmedData; i++) {
                     // this.mData.splice(i, 1, res[i]);
                     // this.mData.splice(i, 1, Math.pow(this.frequencyData[i], 1.5)/32);
                     // this.mData.splice(i, 1, this.frequencyData[i] * 5/9);
@@ -40736,8 +40736,7 @@ module.exports = function listToStyles (parentId, list) {
             }
             // render frame based on values in frequencyData
         },
-
-        play: function play() {
+        play: function () {
             if (!this.playing && this.loaded) {
                 this.audio.play();
                 this.renderFrame();
@@ -40753,17 +40752,17 @@ module.exports = function listToStyles (parentId, list) {
                 this.circe.stop();
             }
         },
-        reverseData: function reverseData() {
-            var x = this.mData.slice().reverse();
+        reverseData() {
+            let x = this.mData.slice().reverse();
             return x;
         },
-        playAnother: function playAnother() {
+        playAnother() {
             this.playing = false;
             this.audio.pause();
-            this.audio = new Audio("../music/" + this.song + ".mp3");
-            this.audio.currentTime = 120.0;
+            this.audio = new Audio(this.pathGenerator());
+            this.audio.currentTime = 0.0;
 
-            var audioSrc = this.ctx.createMediaElementSource(this.audio);
+            let audioSrc = this.ctx.createMediaElementSource(this.audio);
             this.analyser = this.ctx.createAnalyser();
             this.analyser.fftSize = this.num;
             audioSrc.connect(this.analyser);
@@ -40772,8 +40771,8 @@ module.exports = function listToStyles (parentId, list) {
             this.analyser.maxDecibels = this.maxDeci;
             this.circe.set(0);
         },
-        getTimeString: function getTimeString(sec) {
-            var min = Math.floor(Math.round(sec) / 60);
+        getTimeString(sec) {
+            let min = Math.floor(Math.round(sec) / 60);
             sec = Math.round(sec) % 60;
             if (sec < 10) {
                 return min + ":0" + sec;
@@ -40781,32 +40780,32 @@ module.exports = function listToStyles (parentId, list) {
             return min + ":" + sec;
         }
     },
-    mounted: function mounted() {
+    mounted() {
         // a full circle
-        var twoPi = 2 * Math.PI;
-        var bars = document.getElementsByClassName("bar-wrap");
+        let twoPi = 2 * Math.PI;
+        let bars = document.getElementsByClassName("bar-wrap");
         // you want to align objectsCount objects on the circular path
         // with constant distance between neighbors
-        var change = twoPi / bars.length;
+        let change = twoPi / bars.length;
 
-        var j = 0;
-        var center = this.container / 2;
+        let j = 0;
+        let center = this.container / 2;
 
-        for (var i = change / 2; i < twoPi; i += change) {
-            var _x = this.radius * Math.sin(i);
-            var y = this.radius * Math.cos(i);
+        for (let i = change / 2; i < twoPi; i += change) {
+            let x = this.radius * Math.sin(i);
+            let y = this.radius * Math.cos(i);
             // rotation of object in radians
-            var rotation = i;
+            let rotation = i;
             // set the CSS properties to calculated values
             if (bars[j] !== undefined && bars[j] !== null) {
-                bars[j].style.left = center + _x - 5 + "px";
+                bars[j].style.left = center + x - 5 + "px";
                 bars[j].style.top = center + y + "px";
                 bars[j].style.transform = 'rotate(' + -i + 'rad)';
             }
             j++;
         }
 
-        var x = document.getElementById('progress-container');
+        let x = document.getElementById('progress-container');
         this.circe = new __WEBPACK_IMPORTED_MODULE_4_progressbar_js___default.a.Circle(x, {
             strokeWidth: 3,
             easing: 'linear',
@@ -40833,7 +40832,7 @@ module.exports = function listToStyles (parentId, list) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bar_vue__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_bf73d2aa_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bar_vue__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_ce05e204_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bar_vue__ = __webpack_require__(45);
 function injectStyle (ssrContext) {
   __webpack_require__(42)
 }
@@ -40852,7 +40851,7 @@ var __vue_scopeId__ = null
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
   __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_bar_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_bf73d2aa_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bar_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_ce05e204_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_bar_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,
@@ -40873,7 +40872,7 @@ var content = __webpack_require__(43);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(18)("adb8a9d0", content, true);
+var update = __webpack_require__(18)("d7c250bc", content, true);
 
 /***/ }),
 /* 43 */
@@ -40907,7 +40906,7 @@ exports.push([module.i, ".bar-wrap{margin:2px;display:inline-block}.bar,.bar-wra
         height: Number
 
     },
-    data: function data() {
+    data() {
         return {};
     }
 });

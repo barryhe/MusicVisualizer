@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import Vue from "vue"; 
+    import Vue from "vue";
     import Bar from "./bar.vue";
     import Taira from "taira";
     import element from 'element-ui';
@@ -44,7 +44,7 @@
                 container: 700,
                 maxDeci: 0,
                 minDeci: -60,
-                song: "gai",
+                song: "ID",
                 options: ['gai', 'culture', 'headlights', 'ID'],
 
                 radius: 250,  // radius size
@@ -68,8 +68,12 @@
             }
         },
         created: function () {
+            this.setup();
         },
         methods: {
+            pathGenerator () {
+                return "/dist/music/" + this.song + ".mp3";
+            },
             setup: function() {
 
                 this.frequencyData.fill(0);
@@ -83,15 +87,15 @@
                 window.AudioContext = window.AudioContext || window.webkitAudioContext;
                 this.ctx = new AudioContext();
 
-                let path = "../dist/music/" + this.song + ".mp3";
-                this.audio = new Audio(path);
+                this.audio = new Audio(this.pathGenerator());
+                this.audio.crossOrigin = "anonymous";
                 this.audio.addEventListener('loadedmetadata', function() {
                     this.loaded = true;
                 }.bind(this));
 
                 let audioSrc = this.ctx.createMediaElementSource(this.audio);
                 this.analyser = this.ctx.createAnalyser();
-                
+
                 audioSrc.connect(this.analyser);
                 this.analyser.connect(this.ctx.destination);
                 // we have to connect the MediaElementSource with the analyser
@@ -116,7 +120,7 @@
                         // this.mData.splice(i, 1, res[i]);
                         // this.mData.splice(i, 1, Math.pow(this.frequencyData[i], 1.5)/32);
                         // this.mData.splice(i, 1, this.frequencyData[i] * 5/9);
-                        
+
                         // smoothened
                         this.mData.splice(i, 1, Math.pow(temp[i + this.offset], 1));
                     }
@@ -135,7 +139,7 @@
                 } else {
                     this.audio.pause();
                     this.playing = false;
-                    
+
                     this.circe.stop();
                 }
             },
@@ -146,8 +150,8 @@
             playAnother () {
                 this.playing = false;
                 this.audio.pause();
-                this.audio = new Audio("../music/" + this.song + ".mp3");
-                this.audio.currentTime = 120.0;
+                this.audio = new Audio(this.pathGenerator());
+                this.audio.currentTime = 0.0;
 
                 let audioSrc = this.ctx.createMediaElementSource(this.audio);
                 this.analyser = this.ctx.createAnalyser();
@@ -157,7 +161,7 @@
                 this.analyser.minDecibels = this.minDeci;
                 this.analyser.maxDecibels = this.maxDeci;
                 this.circe.set(0);
-            }, 
+            },
             getTimeString(sec) {
                 let min = Math.floor(Math.round(sec) / 60);
                 sec = Math.round(sec) % 60;
@@ -166,10 +170,8 @@
                 }
                 return min + ":" + sec;
             }
-        }, 
+        },
         mounted() {
-            this.setup();
-
             // a full circle
             let twoPi = 2 * Math.PI;
             let bars = document.getElementsByClassName("bar-wrap");
