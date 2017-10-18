@@ -1,6 +1,6 @@
 # music
 
-> A Vue.js project
+> Demo at http://www-scf.usc.edu/~yuhaohe
 
 ## Build Setup
 
